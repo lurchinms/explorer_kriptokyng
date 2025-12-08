@@ -3,8 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Disclaimer & Terms of Service - Kriptoking Explorer",
-  description: "Terms of service and disclaimer for Kriptoking Explorer",
+  title: "Disclaimer & Terms of Service -  Kriptokyng Explorer",
+  description: "Terms of service and disclaimer for  Kriptokyng Explorer",
 };
 
 export default function TermsPage() {
@@ -17,7 +17,7 @@ export default function TermsPage() {
             <div className="flex items-center justify-center">
               <Image
                 src="/images/logo.png"
-                alt="Kriptoking Explorer"
+                alt=" Kriptokyng Explorer"
                 width={200}
                 height={60}
                 className="h-12 w-auto"
@@ -68,7 +68,7 @@ export default function TermsPage() {
 
               <h3 className="text-xl font-semibold text-foreground mt-6 mb-3">3. Limitation of Liability</h3>
               <p className="text-muted-foreground mb-4">
-                In no event shall Kriptoking Explorer, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, 
+                In no event shall  Kriptokyng Explorer, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, 
                 incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses.
               </p>
 

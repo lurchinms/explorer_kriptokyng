@@ -210,7 +210,7 @@ export function AnimatedHero({
                 style={{ fontFamily: "Whisper, cursive" }}
                 variants={itemVariants}
               >
-                KriptoKyng Pool
+                 Kriptokyng Pool
               </motion.h1>
               <motion.p
                 className="text-lg md:text-xl text-muted-foreground leading-relaxed"

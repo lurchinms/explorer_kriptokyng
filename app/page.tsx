@@ -52,7 +52,7 @@ export default function HomePage() {
                 Welcome to {siteConfig.name}
               </h1>
               <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-                The most efficient and reliable mining pool for KriptoKyng
+                The most efficient and reliable mining pool for  Kriptokyng
               </p>
             </div>
             <div className="flex flex-col gap-4 min-[400px]:flex-row">

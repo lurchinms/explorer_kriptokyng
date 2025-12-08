@@ -33,9 +33,9 @@ export type SiteConfig = {
 };
 
 export const siteConfig: SiteConfig = {
-  name: "kriptipking",
-  tagline: "kriptipking",
-  description: "kriptipking provides a fast, reliable, and intuitive blockchain explorer experience — track your transactions, blocks, and network performance in real-time.",
+  name: "kriptokyng",
+  tagline: " Kriptokyng",
+  description: " Kriptokyng provides a fast, reliable, and intuitive blockchain explorer experience — track your transactions, blocks, and network performance in real-time.",
   url: "https://kriptokyng.xyz",
   ogImage: "/logo-mini.png",
   keywords: ["crypto mining pool", "bitcoin mining pool", "ethereum mining pool", "best mining pool", "low fee mining pool", "high hashrate mining pool", "mining pool stats", "mining pool dashboard", "gpu mining pool", "solo mining pool", "multi-coin mining pool", "mining pool payouts", "stratum mining pool", "heroic hashers", "mining dashboard", "track hashrate mining", "cryptocurrency mining pool"],

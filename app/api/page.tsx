@@ -2,15 +2,15 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "API Documentation - Kriptoking Explorer",
-  description: "Developer API documentation for Kriptoking Explorer"
+  title: "API Documentation -  Kriptokyng Explorer",
+  description: "Developer API documentation for  Kriptokyng Explorer"
 };
 
 export default function APIPage() {
   return (
     <div className="container mx-auto px-4 py-12 max-w-5xl">
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-foreground mb-2">Kriptoking Developer API's</h1>
+        <h1 className="text-4xl font-bold text-foreground mb-2"> Kriptokyng Developer API's</h1>
         <p className="text-xl text-muted-foreground">Tools for developers to get data about the blockchains</p>
       </div>
 
@@ -35,7 +35,7 @@ export default function APIPage() {
           You can obtain summary information about all our explorers at the following URL:
         </p>
         <div className="bg-muted/50 p-4 rounded-lg mb-4 overflow-x-auto">
-          <code className="text-sm font-mono break-all">https://kriptoking.info/explorer/api.dws?q=summary</code>
+          <code className="text-sm font-mono break-all">https://kriptokyng.info/explorer/api.dws?q=summary</code>
         </div>
         <p className="text-muted-foreground">
           It returns a short summary of all our explorers. You can also use '24summary' which includes min/max/median for various blocks and transactions for the last 24 hours.
@@ -48,10 +48,10 @@ export default function APIPage() {
           API shares a normalized root URL which is:
         </p>
         <div className="bg-muted/50 p-4 rounded-lg mb-4 overflow-x-auto">
-          <code className="text-sm font-mono break-all">https://kriptoking.info/explorer/api.dws</code>
+          <code className="text-sm font-mono break-all">https://kriptokyng.info/explorer/api.dws</code>
         </div>
         <p className="text-muted-foreground">
-          So for instance the url root for Bitcoin (btc) will be "https://kriptoking.info/btc/api.dws".
+          So for instance the url root for Bitcoin (btc) will be "https://kriptokyng.info/btc/api.dws".
         </p>
       </section>
 
