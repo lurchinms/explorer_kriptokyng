@@ -22,7 +22,6 @@ export function Navbar({ className }: NavbarProps) {
 
   const navigationItems = [
     { href: "/blockchains", label: t("navigation.blockchains") || "Blockchains" },
-    { href: "/faq", label: t("navigation.faq") || "FAQ" },
     { href: "/api", label: t("navigation.api") || "API" },
   ];
 
