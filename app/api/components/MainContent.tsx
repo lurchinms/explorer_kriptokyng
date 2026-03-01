@@ -2,6 +2,7 @@
 import React from 'react';
 import { Endpoint } from '../types';
 import { ApiEndpoint } from './ApiEndpoint';
+import { siteConfig } from '@/config/Site';
 
 interface MainContentProps {
   endpoints: Endpoint[];
@@ -33,9 +34,9 @@ export const MainContent: React.FC<MainContentProps> = ({ endpoints, t, lang }) 
             {t('api.endpoint_note')}
           </p>
           <div className="space-y-3 font-mono text-sm bg-slate-900 text-slate-300 p-6 rounded-xl overflow-x-auto">
-            <p><span className="text-slate-500">Mainnet URL:</span> <span className="text-emerald-400">https://api.bitaps.com/&#123;currency&#125;/v1/blockchain/</span></p>
-            <p><span className="text-slate-500">Testnet URL:</span> <span className="text-emerald-400">https://api.bitaps.com/&#123;currency&#125;/testnet/v1/blockchain/</span></p>
-            <p><span className="text-slate-500">Tor Network:</span> <span className="text-emerald-400">http://bitaps4nifcusilt.onion/&#123;currency&#125;/v1/blockchain/</span></p>
+            <p><span className="text-slate-500">Mainnet URL:</span> <span className="text-emerald-400">{siteConfig.api.baseUrl}</span></p>
+            <p><span className="text-slate-500">WebSocket:</span> <span className="text-emerald-400">{siteConfig.api.websocket?.notificationsUrl || 'N/A'}</span></p>
+            <p><span className="text-slate-500">Explorer:</span> <span className="text-emerald-400">{siteConfig.url}</span></p>
           </div>
           <p className="text-slate-500 text-sm font-medium">{t('api.available_currency')}</p>
         </div>

@@ -1,6 +1,7 @@
 export type SiteConfig = {
   name: string;
   tagline: string;
+   mainName: string;
   description: string;
   url: string;
   ogImage?: string;
@@ -33,8 +34,9 @@ export type SiteConfig = {
 };
 
 export const siteConfig: SiteConfig = {
-  name: "kriptokyng",
+  name: "Explorer",
   tagline: " Kriptokyng",
+  mainName: "Kriptokyng",
   description: " Kriptokyng provides a fast, reliable, and intuitive blockchain explorer experience — track your transactions, blocks, and network performance in real-time.",
   url: "https://kriptokyng.xyz",
   ogImage: "/logo-mini.png",

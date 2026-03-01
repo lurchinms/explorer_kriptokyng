@@ -47,9 +47,19 @@ export default function HomePage() {
 
     {/* Hero */}
     <div className="max-w-3xl space-y-4">
-      <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-        {t("home.welcome")}
-      </h1>
+      <div className="max-w-3xl space-y-4">
+        <div className="flex flex-col items-center">
+          <h2 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
+            Welcome to
+          </h2>
+          <h1 
+            className="text-xl md:text-6xl lg:text-7xl font-medium text-foreground leading-tight bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text"
+            style={{ fontFamily: "Whisper, cursive" }}
+          >
+            Kriptokyng Explorer
+          </h1>
+        </div>
+      </div>
       <p className="text-gray-500 md:text-xl dark:text-gray-400">
         {t("home.tagline")}
       </p>
