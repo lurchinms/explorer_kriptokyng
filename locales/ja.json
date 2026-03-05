@@ -126,7 +126,9 @@
     "blocks": "ブロック",
     "view_more": "さらに表示",
     "search": "プール検索",
-    "enter_pool_name": "プール名またはアルゴリズムを入力してください"
+    "enter_pool_name": "プール名またはアルゴリズムを入力してください",
+    "connectedMiners": "接続中のマイナー",
+    "poolHashrate": "プールハッシュレート"
   },
   "stats": {
     "title": "ライブ統計",

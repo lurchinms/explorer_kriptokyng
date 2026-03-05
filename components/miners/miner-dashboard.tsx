@@ -159,7 +159,7 @@ export function MinerDashboard({
   
     // Calculate earnings based on hashrate share of total rewards
     // This is an estimation based on current reward rate
-    const dailyReward = stats.todayPaid || (stats.totalPaid / 30); // Fallback to average if today's paid is not available
+    const dailyReward = stats.todayPaid || (stats.totalPaid || 0) / 30; // Fallback to average if today's paid is not available
     
     const fourHourEarnings = dailyReward * (4 / 24);
     const twelveHourEarnings = dailyReward * (12 / 24);
@@ -245,7 +245,7 @@ export function MinerDashboard({
   }, 0);
 
   // Total pending balance (from shares + estimated block rewards)
-  const totalPendingBalance = stats.pendingBalance + estimatedPendingBlockRewards;
+  const totalPendingBalance = (stats.pendingBalance || 0) + estimatedPendingBlockRewards;
 
   // Detect mining scheme
   const isSharedMining = poolData?.paymentProcessing?.payoutScheme && 
@@ -329,7 +329,7 @@ export function MinerDashboard({
                   </TooltipTrigger>
                   <TooltipContent side="top">
                     <div className="space-y-1">
-                      <p>{t('minerDashboard.confirmedUnpaid')}: {formatNumber(stats.pendingBalance)} {coinSymbol}</p>
+                      <p>{t('minerDashboard.confirmedUnpaid')}: {formatNumber(stats.pendingBalance || 0)} {coinSymbol}</p>
                       <p>{t('minerDashboard.pendingBlocks')}: {formatNumber(estimatedPendingBlockRewards)} {coinSymbol}</p>
                     </div>
                   </TooltipContent>
@@ -338,15 +338,15 @@ export function MinerDashboard({
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold flex items-center">
-                {formatNumber(stats.pendingBalance + estimatedPendingBlockRewards)}
+                {formatNumber((stats.pendingBalance || 0) + estimatedPendingBlockRewards)}
                 <sup className="text-xs font-medium text-muted-foreground">{coinSymbol}</sup>
                 {priceData && priceData.price !== null && (
                   <span className="text-sm text-green-500 ml-1">
-                    (${formatNumber((stats.pendingBalance + estimatedPendingBlockRewards) * priceData.price, 2)})
+                    (${formatNumber(((stats.pendingBalance || 0) + estimatedPendingBlockRewards) * priceData.price, 2)})
                   </span>
                 )}
               </div>
-              {(stats.totalPendingBlocks > 0 || estimatedPendingBlockRewards > 0) && (
+              {((stats.totalPendingBlocks || 0) > 0 || estimatedPendingBlockRewards > 0) && (
                 <div className="flex items-center gap-1 mt-2">
                   <Clock className="h-4 w-4 text-muted-foreground" />
                   <span className="text-sm text-muted-foreground">
@@ -362,18 +362,18 @@ export function MinerDashboard({
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-sm">{t('minerDashboard.totalPaid')}</CardTitle>
-                {stats.todayPaid > 0 && (
+                {(stats.todayPaid || 0) > 0 && (
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
                     </TooltipTrigger>
                     <TooltipContent side="top">
                       <div className="flex items-center">
-                        {t('minerDashboard.today')}: {formatNumber(stats.todayPaid)}
+                        {t('minerDashboard.today')}: {formatNumber(stats.todayPaid || 0)}
                         <sup className="text-xs">{coinSymbol}</sup>
                         {priceData && priceData.price !== null && (
                           <span className="text-sm text-green-500 ml-1">
-                            (${formatNumber(stats.todayPaid * priceData.price, 2)})
+                            (${formatNumber((stats.todayPaid || 0) * priceData.price, 2)})
                           </span>
                         )}
                       </div>
@@ -384,18 +384,18 @@ export function MinerDashboard({
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold flex items-center">
-                {formatNumber(stats.totalPaid)}
+                {formatNumber(stats.totalPaid || 0)}
                 <sup className="text-xs font-medium text-muted-foreground">{coinSymbol}</sup>
                 {priceData && priceData.price !== null && (
                   <span className="text-sm text-green-500 ml-1">
-                    (${formatNumber(stats.totalPaid * priceData.price, 2)})
+                    (${formatNumber((stats.totalPaid || 0) * priceData.price, 2)})
                   </span>
                 )}
               </div>
               <div className="flex items-center gap-1 mt-2">
                 <Blocks className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm text-muted-foreground">
-                  {formatNumber(stats.totalConfirmedBlocks || 0, 0)} {t('minerDashboard.confirmedBlocks')}
+                  {formatNumber((stats.totalConfirmedBlocks || 0), 0)} {t('minerDashboard.confirmedBlocks')}
                 </span>
               </div>
             </CardContent>

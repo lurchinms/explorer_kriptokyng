@@ -1,5 +1,6 @@
 'use client';
 
+import React from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { useLanguage } from "@/contexts/language-context";
@@ -31,20 +32,39 @@ const getTxDetails = (txid: string) => {
 export default function TxPage({
   params,
 }: {
-  params: { id: string; txid: string };
+  params: Promise<{ id: string; txid: string }>;
 }) {
+  return <TxPageClient params={params} />;
+}
+
+function TxPageClient({
+  params,
+}: {
+  params: Promise<{ id: string; txid: string }>;
+}) {
+  const [resolvedParams, setResolvedParams] = React.useState<{ id: string; txid: string } | null>(null);
   const { t } = useLanguage();
-  const tx = getTxDetails(params.txid);
+
+  React.useEffect(() => {
+    params.then(setResolvedParams);
+  }, [params]);
+
+  if (!resolvedParams) {
+    return <div className="p-10">Loading...</div>;
+  }
+
+  const { id, txid } = resolvedParams;
+  const tx = getTxDetails(txid);
 
   if (!tx)
     return (
-      <div className="p-10">{t("blockchain.transaction_not_found")}: {params.txid}</div>
+      <div className="p-10">{t("blockchain.transaction_not_found")}: {txid}</div>
     );
 
   return (
     <div className="container mx-auto px-4 py-10">
       <Link
-        href={`/blockchains/${params.id}/blocks/${tx.block_height}`}
+        href={`/blockchains/${id}/blocks/${tx.block_height}`}
         className="inline-flex items-center text-primary hover:underline mb-6"
       >
         <ArrowLeft className="mr-2 h-4 w-4" /> {t("blockchain.back_to_block")}
@@ -54,11 +74,11 @@ export default function TxPage({
 
       <div className="bg-muted/30 border p-6 rounded-lg mb-6">
         <p className="text-muted-foreground">{t("blockchain.hash")}:</p>
-        <p className="font-mono break-all mb-4">{params.txid}</p>
+        <p className="font-mono break-all mb-4">{txid}</p>
 
         <p className="text-muted-foreground">{t("blockchain.included_in_block")}:</p>
         <Link
-          href={`/blockchains/${params.id}/blocks/${tx.block_height}`}
+          href={`/blockchains/${id}/blocks/${tx.block_height}`}
           className="text-primary font-mono"
         >
           {tx.block_height}

@@ -13,20 +13,19 @@ import { useLanguage } from "@/contexts/language-context";
 
 interface Pool {
   id: string;
-  coin: {
+  name: string;
+  hashrate: number;
+  miners?: number;
+  coin?: {
     symbol: string;
     name: string;
     algorithm: string;
   };
-  poolStats?: {
-    poolHashrate: number;
-    connectedMiners: number;
-  };
-  paymentProcessing: {
+  paymentProcessing?: {
     payoutScheme: string;
   };
-  totalPaid: number;
-  totalBlocks: number;
+  totalPaid?: number;
+  totalBlocks?: number;
 }
 
 interface LiveStatsCardProps {
@@ -48,26 +47,29 @@ export function LiveStatsCard({
 }: LiveStatsCardProps) {
   const { t } = useLanguage();
   const { isConnected } = useWebSocket();
-  const { pools, poolHashrates, recentEvents, lastApiUpdate, isRefreshing } = useLiveData();
+  const { pools, poolHashrates } = useLiveData();
 
   // Update pools with live hashrate data
-  const updatedPools = pools.map(pool => ({
+  const updatedPools = pools.map((pool: Pool) => ({
     ...pool,
-    poolStats: {
-      ...pool.poolStats,
-      poolHashrate: poolHashrates[pool.id] ?? pool.poolStats?.poolHashrate ?? 0
-    }
+    hashrate: poolHashrates[pool.id] ?? pool.hashrate ?? 0
   }));
 
   // Calculate live totals
-  const liveHashrateFromWS = Object.values(poolHashrates).reduce((sum, rate) => sum + rate, 0);
-  const totalHashrate = liveHashrateFromWS > 0 ? liveHashrateFromWS : initialTotalHashrate;
-  const totalMiners = updatedPools.reduce((sum, pool) => sum + (pool.poolStats?.connectedMiners || 0), 0);
+  const liveHashrateFromWS = (Object.values(poolHashrates) as number[]).reduce(
+    (sum: number, rate: number) => sum + rate,
+    0
+  );
+  const totalHashrate =
+    (liveHashrateFromWS as number) > 0
+      ? (liveHashrateFromWS as number)
+      : updatedPools.reduce(
+          (sum: number, pool: Pool) => sum + (pool.hashrate || 0),
+          0
+        );
 
   // Get top 3 pools by hashrate
-  const topPools = updatedPools
-    .sort((a, b) => (b.poolStats?.poolHashrate || 0) - (a.poolStats?.poolHashrate || 0))
-    .slice(0, 3);
+  const sortedPools = [...updatedPools].sort((a: Pool, b: Pool) => (b.hashrate || 0) - (a.hashrate || 0));
 
   const cardVariants = {
     hidden: { opacity: 0, scale: 0.95 },
@@ -99,14 +101,11 @@ export function LiveStatsCard({
           <div className="text-sm text-muted-foreground text-center">
             {isConnected ? (
               <span>
-                {t("home.liveStats.liveUpdates")} • {t("home.liveStats.last")}: {lastApiUpdate?.toLocaleTimeString() || t("common.na")}
-                {isRefreshing && (
-                  <span className="text-blue-500 ml-2">{t("home.liveStats.updating")}</span>
-                )}
+                {t("home.liveStats.liveUpdates")} • {t("home.liveStats.last")}: 
               </span>
             ) : (
               <span className="text-yellow-600 dark:text-yellow-400">
-                {t("home.liveStats.wsDisconnected")} • {t("home.liveStats.lastApi")}: {lastApiUpdate?.toLocaleTimeString() || t("common.na")}
+                {t("home.liveStats.wsDisconnected")} • {t("home.liveStats.lastApi")}: 
               </span>
             )}
           </div>
@@ -120,7 +119,7 @@ export function LiveStatsCard({
               <div className="text-xs text-muted-foreground uppercase tracking-wide">{t("home.liveStats.pools")}</div>
             </div>
             <div className="text-center p-4 bg-gradient-to-br from-muted/40 to-muted/20 dark:from-muted/60 dark:to-muted/30 rounded-xl border border-border/40 shadow-sm">
-              <div className="text-3xl font-bold text-foreground">{formatNumber(totalMiners, 0)}</div>
+              <div className="text-3xl font-bold text-foreground">{formatNumber(totalHashrate, 0)}</div>
               <div className="text-xs text-muted-foreground uppercase tracking-wide">{t("home.liveStats.miners")}</div>
             </div>
             <div className="text-center p-4 bg-gradient-to-br from-muted/40 to-muted/20 dark:from-muted/60 dark:to-muted/30 rounded-xl border border-border/40 shadow-sm">
@@ -140,42 +139,43 @@ export function LiveStatsCard({
               <span className="text-xs text-muted-foreground">{pools.length} {t("home.liveStats.available")}</span>
             </div>
             <div className="space-y-2">
-              {topPools.map((pool, index) => {
-                const hasLiveData = poolHashrates[pool.id] !== undefined;
-                return (
-                  <div key={pool.id} className="flex items-center justify-between p-3 bg-gradient-to-r from-muted/30 to-muted/15 dark:from-muted/40 dark:to-muted/20 rounded-xl border border-border/30 hover:from-muted/40 hover:to-muted/25 dark:hover:from-muted/50 dark:hover:to-muted/30 transition-all duration-200">
-                    <div className="flex items-center gap-3">
-                      <div className="w-6 h-6 bg-gradient-to-br from-primary/15 to-primary/8 dark:from-primary/20 dark:to-primary/10 text-primary rounded-full flex items-center justify-center text-xs font-bold">
-                        {index + 1}
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <CoinIcon 
-                          symbol={pool.coin.symbol} 
-                          name={pool.coin.name} 
-                          size={18} 
-                        />
-                        <div>
-                          <div className="text-sm font-medium flex items-center gap-2">
-                            {pool.coin.symbol}
+              {sortedPools.slice(0, 5).map((pool: Pool, index: number) => (
+                <div key={pool.id} className="flex items-center justify-between p-3 bg-gradient-to-r from-muted/30 to-muted/15 dark:from-muted/40 dark:to-muted/20 rounded-xl border border-border/30 hover:from-muted/40 hover:to-muted/25 dark:hover:from-muted/50 dark:hover:to-muted/30 transition-all duration-200">
+                  <div className="flex items-center gap-3">
+                    <div className="w-6 h-6 bg-gradient-to-br from-primary/15 to-primary/8 dark:from-primary/20 dark:to-primary/10 text-primary rounded-full flex items-center justify-center text-xs font-bold">
+                      {index + 1}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CoinIcon 
+                        symbol={pool.coin?.symbol || 'BTC'} 
+                        name={pool.coin?.name || pool.name || 'Unknown'} 
+                        size={18} 
+                      />
+                      <div>
+                        <div className="text-sm font-medium flex items-center gap-2">
+                          {pool.coin?.symbol || pool.name || 'Unknown'}
+                          {pool.paymentProcessing?.payoutScheme && (
                             <span className="text-xs text-muted-foreground bg-muted/60 rounded px-2 py-0.5 border border-border/30 ml-1">
                               {pool.paymentProcessing.payoutScheme}
                             </span>
-                          </div>
-                          <div className="text-xs text-muted-foreground">{pool.coin.algorithm}</div>
+                          )}
                         </div>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-sm font-medium">
-                        {formatHashrate(pool.poolStats?.poolHashrate || 0)}
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        {formatNumber(pool.poolStats?.connectedMiners || 0, 0)} {t("home.liveStats.minersSuffix")}
+                        {pool.coin?.algorithm && (
+                          <div className="text-xs text-muted-foreground">{pool.coin.algorithm}</div>
+                        )}
                       </div>
                     </div>
                   </div>
-                );
-              })}
+                  <div className="text-right">
+                    <div className="text-sm font-medium">
+                      {formatHashrate(pool.hashrate || 0)}
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      {formatNumber(pool.miners || 0, 0)} {t("home.liveStats.minersSuffix")}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
           

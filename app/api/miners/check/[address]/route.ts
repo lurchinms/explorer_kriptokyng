@@ -44,8 +44,8 @@ export async function GET(
           // Get additional data from database
           try {
             const [hashrateHistory, payments, summary] = await Promise.all([
-              getMinerHashrateHistory(pool.id, address, 24),
-              getMinerPayments(pool.id, address, 10),
+              getMinerHashrateHistory(pool.id, address, '24h'),
+              getMinerPayments(pool.id, address),
               getMinerStatsSummary(pool.id, address)
             ]);
 
@@ -62,7 +62,7 @@ export async function GET(
               // Database data
               hashrateHistory: hashrateHistory,
               recentPayments: payments,
-              summary: summary.length > 0 ? summary[0] : null
+              summary: summary
             };
 
             minerData.pools.push(poolData);

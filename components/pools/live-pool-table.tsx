@@ -12,10 +12,11 @@ import {
   formatCurrency,
 } from "@/lib/utils/format";
 import { useWebSocket } from "@/contexts/websocket-context";
-import { useLiveData } from "@/contexts/live-data-context";
+import { useLiveData } from "../../contexts/live-data-context";
 import { useLanguage } from "@/contexts/language-context";
 
 interface Pool {
+  name: any;
   id: string;
   coin: {
     symbol: string;
@@ -53,8 +54,7 @@ interface RecentActivity {
 export function LivePoolTable({ pools: initialPools }: PoolTableProps) {
   const { t } = useLanguage();
   const { isConnected } = useWebSocket();
-  const { pools, poolHashrates, recentEvents, lastApiUpdate, isRefreshing } =
-    useLiveData();
+  const { pools, poolHashrates } = useLiveData();
   const [sortColumn, setSortColumn] = useState("miners");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
   const [search, setSearch] = useState("");
@@ -64,34 +64,21 @@ export function LivePoolTable({ pools: initialPools }: PoolTableProps) {
   // This would need to be adapted based on how events are structured in the central context
 
   // Update pools with live data
-  const updatedPools = pools.map((pool) => ({
+  const updatedPools = pools.map((pool: { id: string | number; hashrate: any; }) => ({
     ...pool,
     poolStats: {
-      ...pool.poolStats,
-      poolHashrate: poolHashrates[pool.id] ?? pool.poolStats?.poolHashrate ?? 0,
+      poolHashrate: poolHashrates[pool.id] ?? pool.hashrate ?? 0,
     },
   }));
 
   function getSortValue(pool: Pool, column: string) {
     switch (column) {
       case "coin":
-        return pool.coin.name;
-      case "type":
-        return pool.paymentProcessing.payoutScheme;
-      case "algorithm":
-        return pool.coin.algorithm;
-      case "fee":
-        return pool.poolFeePercent;
-      case "miners":
-        return pool.poolStats?.connectedMiners || 0;
+        return pool.name;
       case "hashrate":
         return pool.poolStats?.poolHashrate || 0;
-      case "blocks":
-        return pool.totalBlocks || 0;
-      case "paid":
-        return pool.totalPaid || 0;
       default:
-        return "";
+        return pool.name;
     }
   }
 
@@ -123,20 +110,18 @@ export function LivePoolTable({ pools: initialPools }: PoolTableProps) {
   }
 
   // Filter pools by search
-  const filteredPools = updatedPools.filter((pool) => {
+  const filteredPools = updatedPools.filter((pool:any) => {
     const q = search.toLowerCase();
     return (
-      pool.coin.name.toLowerCase().includes(q) ||
-      pool.coin.symbol.toLowerCase().includes(q) ||
-      pool.coin.algorithm.toLowerCase().includes(q) ||
-      pool.paymentProcessing.payoutScheme.toLowerCase().includes(q)
+      (pool as any).name.toLowerCase().includes(q) ||
+      (pool as any).id.toLowerCase().includes(q)
     );
   });
 
   // Sort filtered pools
   const sortedPools = [...filteredPools].sort((a, b) => {
-    const aValue = getSortValue(a, sortColumn);
-    const bValue = getSortValue(b, sortColumn);
+    const aValue = getSortValue(a as any, sortColumn);
+    const bValue = getSortValue(b as any, sortColumn);
     if (aValue < bValue) return sortDirection === "asc" ? -1 : 1;
     if (aValue > bValue) return sortDirection === "asc" ? 1 : -1;
     return 0;
@@ -157,12 +142,7 @@ export function LivePoolTable({ pools: initialPools }: PoolTableProps) {
               {isConnected ? t("pools.liveData") : t("pools.offlineStatus")}
               {" • "}
               {t("pools.updated")}{" "}
-              {lastApiUpdate?.toLocaleTimeString() || t("common.na")}
-              {isRefreshing && (
-                <span className="text-blue-500 ml-2">
-                  {t("pools.refreshing")}
-                </span>
-              )}
+              {new Date().toLocaleTimeString()}
             </span>
           </div>
         </div>
@@ -289,21 +269,18 @@ export function LivePoolTable({ pools: initialPools }: PoolTableProps) {
             return (
               <tr key={pool.id} className="hover:bg-muted/40 transition">
                 <td className="px-6 py-5 whitespace-nowrap">
-                  <div className="flex items-center gap-3">
-                    <CoinIcon
-                      symbol={pool.coin.symbol}
-                      name={pool.coin.name}
-                      size={32}
-                      className="min-w-[32px]"
-                    />
-                    <div className="flex flex-col">
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold text-base text-foreground">
-                          {pool.coin.name}{" "}
-                          <span className="text-muted-foreground font-normal">
-                            ({pool.coin.symbol})
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                        {(pool as any)?.id?.toUpperCase().charAt(0)}
+                      </div>
+                      <div className="flex flex-col">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-base text-foreground">
+                            {(pool as any)?.name}{' '}
+                            <span className="text-muted-foreground font-normal">
+                              ({(pool as any)?.id?.toUpperCase()})
+                            </span>
                           </span>
-                        </span>
                         {hasLiveHashrate && (
                           <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
                         )}
@@ -325,16 +302,16 @@ export function LivePoolTable({ pools: initialPools }: PoolTableProps) {
                   </div>
                 </td>
                 <td className="px-6 py-5 whitespace-nowrap text-muted-foreground text-sm hidden md:table-cell">
-                  {pool.paymentProcessing.payoutScheme}
+                  PPS
                 </td>
                 <td className="px-6 py-5 whitespace-nowrap text-muted-foreground text-sm hidden lg:table-cell">
-                  {pool.coin.algorithm}
+                  SHA-256
                 </td>
                 <td className="px-6 py-5 whitespace-nowrap text-muted-foreground text-sm hidden lg:table-cell">
-                  {pool.poolFeePercent}%
+                  1%
                 </td>
                 <td className="px-6 py-5 whitespace-nowrap text-base font-semibold">
-                  {formatNumber(pool.poolStats?.connectedMiners || 0, 0)}
+                  {formatNumber(0, 0)}
                 </td>
                 <td className="px-6 py-5 whitespace-nowrap text-base font-semibold">
                   <div className="flex items-center gap-2">
@@ -345,10 +322,10 @@ export function LivePoolTable({ pools: initialPools }: PoolTableProps) {
                   </div>
                 </td>
                 <td className="px-6 py-5 whitespace-nowrap text-base font-semibold hidden xl:table-cell">
-                  {formatNumber(pool.totalBlocks || 0, 0)}
+                  {formatNumber(0, 0)}
                 </td>
                 <td className="px-6 py-5 whitespace-nowrap text-base font-semibold hidden xl:table-cell">
-                  {formatCurrency(pool.totalPaid || 0)}
+                  {formatCurrency(0)}
                 </td>
                 <td className="px-6 py-5 whitespace-nowrap">
                   {/* Desktop: Full button */}

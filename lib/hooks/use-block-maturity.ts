@@ -1,14 +1,5 @@
 import { useState, useEffect } from 'react';
-import { calculateBlockMaturity } from '@/lib/services/block-maturity-service';
-
-interface BlockMaturityInfo {
-  blockHeight: number;
-  currentNetworkHeight: number;
-  confirmations: number;
-  confirmationProgress: number;
-  isMatured: boolean;
-  requiredConfirmations: number;
-}
+import { calculateBlockMaturity, BlockMaturityInfo } from '@/lib/services/block-maturity-service';
 
 export function useBlockMaturity(poolId: string, blockHeight: number, status: string) {
   const [maturity, setMaturity] = useState<BlockMaturityInfo | null>(null);
@@ -24,7 +15,7 @@ export function useBlockMaturity(poolId: string, blockHeight: number, status: st
     setLoading(true);
     calculateBlockMaturity(poolId, blockHeight)
       .then(setMaturity)
-      .catch(error => {
+      .catch((error: unknown) => {
         console.error('Failed to calculate block maturity:', error);
         setMaturity(null);
       })

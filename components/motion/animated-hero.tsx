@@ -91,29 +91,25 @@ export function AnimatedHero({
   const { t } = useLanguage();
 
   // Update pools with live hashrate data
-  const updatedPools = pools.map((pool) => ({
+  const updatedPools = pools.map((pool: any) => ({
     ...pool,
-    poolStats: {
-      ...pool.poolStats,
-      poolHashrate: poolHashrates[pool.id] ?? pool.poolStats?.poolHashrate ?? 0,
-      connectedMiners: pool.poolStats?.connectedMiners ?? 0,
-    },
+    hashrate: poolHashrates[pool.id] ?? pool.hashrate ?? 0,
   }));
 
   // Calculate live totals
-  const liveHashrateFromWS = Object.values(poolHashrates).reduce(
-    (sum, rate) => sum + rate,
+  const liveHashrateFromWS = (Object.values(poolHashrates) as number[]).reduce(
+    (sum: number, rate: number) => sum + rate,
     0
   );
   const totalHashrate =
-    liveHashrateFromWS > 0
-      ? liveHashrateFromWS
+    (liveHashrateFromWS as number) > 0
+      ? (liveHashrateFromWS as number)
       : updatedPools.reduce(
-          (sum, pool) => sum + (pool.poolStats?.poolHashrate || 0),
+          (sum: number, pool: any) => sum + (pool.hashrate || 0),
           0
         );
   const totalMiners = updatedPools.reduce(
-    (sum, pool) => sum + (pool.poolStats?.connectedMiners || 0),
+    (sum: number, pool: any) => sum + (pool.miners || 0),
     0
   );
   return (
@@ -217,7 +213,7 @@ export function AnimatedHero({
                 variants={itemVariants}
               >
                 {t("home.mine")} {""}
-                {[...new Set(pools.map((pool) => pool.coin.symbol))]
+                {[...new Set(pools.map((pool: any) => pool.coin?.symbol || pool.symbol))]
                   .slice(0, 5)
                   .join(", ")}
                 {pools.length > 5 ? ` ${t("home.andMore")}` : ""} {" "}
@@ -268,7 +264,7 @@ export function AnimatedHero({
                   <span className="ml-1 text-base text-muted-foreground">
                     {formatHashrate(totalHashrate).split(" ")[1]}
                   </span>
-                  {liveHashrateFromWS > 0 && (
+                  {(liveHashrateFromWS as number) > 0 && (
                     <span className="ml-2 w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
                   )}
                 </div>

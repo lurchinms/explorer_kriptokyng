@@ -357,7 +357,7 @@ export function MinerHashrateChart({ poolId, address }: MinerHashrateChartProps)
                       
                       {poolHashrate > 0 && (
                         <p className="text-sm text-muted-foreground mt-2 pt-2 border-t">
-                          {t('minerHashrate.contribution', { percent: contribution.toFixed(2) })}
+                          {t('minerHashrate.contribution')}: {contribution.toFixed(2)}%
                         </p>
                       )}
                     </div>

@@ -40,6 +40,7 @@ export async function getCryptoPrice(symbol: string): Promise<CryptoPrice | null
 export const cryptoPriceApi = {
   getCryptoPrices,
   getCryptoPrice,
+  getCoinPrice: getCryptoPrice, // Alias for compatibility
   getHistoricalPrices: async (symbol: string, days: number = 7) => {
     // Mock implementation
     return Array.from({ length: days }, (_, i) => ({

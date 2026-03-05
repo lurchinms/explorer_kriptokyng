@@ -117,7 +117,7 @@ export async function GET(
     }
 
     // Get raw data from database
-    const rawData = await getMinerWorkerStats(poolId, address, hours);
+    const rawData = await getMinerWorkerStats(poolId, address);
     
     if (!rawData || rawData.length === 0) {
       return NextResponse.json({

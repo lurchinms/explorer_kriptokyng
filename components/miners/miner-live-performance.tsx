@@ -310,7 +310,7 @@ export function MinerLivePerformance({
               {t('minerLivePerformance.databaseError')}: {historyError}
               <br />
               <small className="text-muted-foreground mt-1">
-                {livePoints.length > 0 ? t('minerLivePerformance.showingLiveOnly', { count: livePoints.length }) : t('minerLivePerformance.noData')}
+                {livePoints.length > 0 ? `${t('minerLivePerformance.showingLiveOnly')}: ${livePoints.length}` : t('minerLivePerformance.noData')}
               </small>
             </div>
           ) : (
@@ -432,7 +432,7 @@ export function MinerLivePerformance({
         )}
         {livePoints.length > 0 && (
           <div className="absolute top-2 right-14 w-2 h-2 bg-orange-500 rounded-full animate-pulse" 
-               title={t('minerLivePerformance.liveDataPoints', { count: livePoints.length })} />
+               title={`${livePoints.length} ${t('minerLivePerformance.liveDataPoints')}`} />
         )}
       </Card>
     </motion.div>

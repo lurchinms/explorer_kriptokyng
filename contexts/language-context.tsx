@@ -13,9 +13,7 @@ import arTranslations from '@/locales/ar.json';
 import jaTranslations from '@/locales/ja.json';
 
 // Define the shape of our translations
-interface Translations {
-  [key: string]: string | { [key: string]: string };
-}
+type Translations = Record<string, string | Record<string, any>>;
 
 // Define the context type
 interface LanguageContextType {

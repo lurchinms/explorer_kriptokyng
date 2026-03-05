@@ -106,7 +106,8 @@ export async function GET(
 
 
     // Get raw data from database
-    const rawData = await getPoolHashrateHistory(poolId, hours);
+    const timeRange = `${hours}h`;
+    const rawData = await getPoolHashrateHistory(poolId, timeRange);
     
     if (!rawData || rawData.length === 0) {
       return NextResponse.json({

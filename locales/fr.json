@@ -126,7 +126,9 @@
     "blocks": "Blocs",
     "view_more": "Voir plus",
     "search": "Rechercher un pool",
-    "enter_pool_name": "Entrez le nom du pool ou l'algorithme"
+    "enter_pool_name": "Entrez le nom du pool ou l'algorithme",
+    "connectedMiners": "Mineurs connectés",
+    "poolHashrate": "Taux de hachage du pool"
   },
   "stats": {
     "title": "Statistiques en direct",

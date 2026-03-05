@@ -41,7 +41,7 @@ export async function GET(request: Request) {
     }
 
     // Get the price data - always attempt regardless of market data
-    const priceData = await cryptoPriceApi.getCoinPrice(upperCaseSymbol, poolId || undefined);
+    const priceData = await cryptoPriceApi.getCoinPrice(upperCaseSymbol);
     console.log(`Returning price data for ${upperCaseSymbol}:`, priceData);
     
     // If we don't have a price, try to provide a more informative response

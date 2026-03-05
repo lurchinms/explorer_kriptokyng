@@ -126,7 +126,9 @@
     "blocks": "Blocks",
     "view_more": "View More",
     "search": "Search Pool",
-    "enter_pool_name": "Enter pool name or algorithm"
+    "enter_pool_name": "Enter pool name or algorithm",
+    "connectedMiners": "Connected Miners",
+    "poolHashrate": "Pool Hashrate"
   },
   "stats": {
     "title": "Live Statistics",
@@ -466,8 +468,32 @@
     "no_data_available": "No data available",
     "loading_data": "Loading data..."
   },
+  "minerHashrate": {
+    "hashrate": "Hashrate"
+  },
+  "minerLivePerformance": {
+    "hashrateHistory": "Hashrate History",
+    "inactive": "Inactive",
+    "databaseError": "Database Error",
+    "showingLiveOnly": "Showing live data only",
+    "noData": "No data available",
+    "database": "Database",
+    "samples": "samples",
+    "current": "Current",
+    "average": "Average", 
+    "peak": "Peak",
+    "historical": "Historical",
+    "points": "points",
+    "loading": "loading",
+    "total": "Total",
+    "lastSync": "Last sync",
+    "liveUpdate": "Live update",
+    "minerIsActive": "Miner is active",
+    "loadingDatabase": "Loading database...",
+    "liveDataPoints": "live data points"
+  },
   "footer": {
-    "copyright": "© 2026 kriptokyng. All rights reserved.",
+    "copyright": " 2026 kriptokyng. All rights reserved.",
     "terms_of_service": "Terms of Service",
     "privacy_policy": "Privacy Policy",
     "contact_us": "Contact Us"

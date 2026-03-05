@@ -96,7 +96,8 @@ export async function GET(
 
 
     // Get raw data from database
-    const rawData = await getMinerHashrateHistory(decodedPoolId, decodedAddress, hours);
+    const timeRange = `${hours}h`;
+    const rawData = await getMinerHashrateHistory(decodedPoolId, decodedAddress, timeRange);
     
     if (!rawData || rawData.length === 0) {
       return NextResponse.json({

@@ -9,11 +9,6 @@ const APIPage: React.FC = () => {
   const { t, language } = useLanguage();
   const isRTL = language === 'ar';
 
-  if (!t) {
-    return <div>Loading...</div>;
-  }
-
-
   const endpoints: Endpoint[] = useMemo(() => [
     {
       id: 'block_id',
@@ -117,6 +112,10 @@ const APIPage: React.FC = () => {
         }
     }
   ], [t]);
+
+  if (!t) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className={`min-h-screen bg-white ${isRTL ? 'text-right' : 'text-left'}`} dir={isRTL ? 'rtl' : 'ltr'}>

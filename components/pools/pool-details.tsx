@@ -31,11 +31,11 @@ export function PoolDetails({ pool, wsConnected = false }: PoolDetailsProps) {
   const hasPriceData = priceData && priceData.price !== null;
 
   // Calculate total confirmed blocks (total blocks minus pending blocks)
-  const totalConfirmedBlocks = pool.totalConfirmedBlocks ?? (pool.totalBlocks - (pool.totalPendingBlocks || 0));
+  const totalConfirmedBlocks = pool.totalConfirmedBlocks ?? ((pool.totalBlocks || 0) - (pool.totalPendingBlocks || 0));
   const totalPendingBlocks = pool.totalPendingBlocks || 0;
 
   // Calculate total confirmed block rewards
-  const totalConfirmedRewards = pool.blockReward * totalConfirmedBlocks;
+  const totalConfirmedRewards = (pool.blockReward ?? 0) * totalConfirmedBlocks;
 
   // Calculate USD value if price data is available
   const totalRewardsUsd = hasPriceData
@@ -258,7 +258,7 @@ export function PoolDetails({ pool, wsConnected = false }: PoolDetailsProps) {
           <CardContent className="flex flex-col justify-between h-full">
             <p className="text-2xl font-bold">{formatHashrate(pool.poolStats?.poolHashrate || 0)}</p>
            <p className="text-sm text-muted-foreground mt-1">
-  {t('pool.connectedMiners', { count: pool?.poolStats?.connectedMiners || 0 })}
+  {t('pool.connectedMiners')}: {pool?.poolStats?.connectedMiners || 0}
 </p>
 
             <Button
@@ -281,7 +281,7 @@ export function PoolDetails({ pool, wsConnected = false }: PoolDetailsProps) {
           </CardHeader>
           <CardContent className="flex flex-col justify-between h-full">
             <div>
-              <p className="text-2xl font-bold">{formatNumber(pool.totalBlocks, 0)}</p>
+              <p className="text-2xl font-bold">{formatNumber(pool.totalBlocks || 0, 0)}</p>
 
               {/* Show confirmed vs pending breakdown */}
               <div className="mt-1 text-sm">
@@ -371,7 +371,7 @@ export function PoolDetails({ pool, wsConnected = false }: PoolDetailsProps) {
                   <div>{pool.paymentProcessing.minimumPayment} {pool.coin.symbol}</div>
 
                   <div className="text-muted-foreground">{t('pool.totalPaid')}</div>
-                  <div>{formatNumber(pool.totalPaid)} {pool.coin.symbol}</div>
+                  <div>{formatNumber(pool.totalPaid || 0)} {pool.coin.symbol}</div>
 
                   <div className="text-muted-foreground">{t('pool.connectionTimeout')}</div>
                   <div>{pool.clientConnectionTimeout}s</div>

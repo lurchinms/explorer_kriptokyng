@@ -16,12 +16,11 @@ interface LivePoolStatsProps {
 
 export function LivePoolStats({ poolId, currentHashrate = 0 }: LivePoolStatsProps) {
   const { t } = useLanguage();
-  const { isConnected, connectionStatus } = useWebSocket();
-  const { poolHashrates, getPoolEvents } = useLiveData();
+  const { isConnected } = useWebSocket();
+  const { poolHashrates } = useLiveData();
   const [lastUpdateTime, setLastUpdateTime] = useState<Date>(new Date());
   
   const liveHashrate = poolHashrates[poolId];
-  const poolEvents = getPoolEvents(poolId);
   const hasLiveData = liveHashrate !== undefined;
   
   // Update timestamp when live data changes
@@ -66,7 +65,7 @@ export function LivePoolStats({ poolId, currentHashrate = 0 }: LivePoolStatsProp
         <div className="flex items-center justify-between text-sm">
           <span className="text-muted-foreground">{t('pool.livePoolStats.status')}:</span>
           <span className={isConnected ? "text-green-600" : "text-muted-foreground"}>
-            {connectionStatus}
+            {isConnected ? t('pool.livePoolStats.connected') : t('pool.livePoolStats.disconnected')}
           </span>
         </div>
         
@@ -103,27 +102,10 @@ export function LivePoolStats({ poolId, currentHashrate = 0 }: LivePoolStatsProp
           </>
         )}
         
-        {/* Recent Pool Events */}
-        {poolEvents.length > 0 && (
-          <div className="space-y-2">
-            <h4 className="text-sm font-medium text-muted-foreground">{t('pool.livePoolStats.recentEvents')}:</h4>
-            <div className="space-y-1">
-              {poolEvents.slice(0, 3).map((event, index) => (
-                <div 
-                  key={index}
-                  className="text-sm p-2 rounded-md bg-muted/50 border border-border/50"
-                >
-                  {event}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-        
         {/* No Live Data Message */}
         {!hasLiveData && isConnected && (
           <div className="text-sm text-muted-foreground text-center py-2">
-            {t('pool.livePoolStats.waitingForData', { poolId })}
+            {t('pool.livePoolStats.waitingForData')}
           </div>
         )}
         
